@@ -29,9 +29,13 @@ public class NoteParser {
             } else if (line.startsWith("author:")) {
                 author = line.substring("author:".length()).trim();
             } else if (line.startsWith("created:")) {
-                created = LocalDateTime.parse(line.substring("created:".length()).trim());
+                String value = line.substring("created:".length()).trim();
+                if (value.endsWith("Z")) value = value.substring(0, value.length() - 1);
+                created = LocalDateTime.parse(value);
             } else if (line.startsWith("modified:")) {
-                modified = LocalDateTime.parse(line.substring("modified:".length()).trim());
+                String value = line.substring("modified:".length()).trim();
+                if (value.endsWith("Z")) value = value.substring(0, value.length() - 1);
+                modified = LocalDateTime.parse(value);
             } else if (line.startsWith("tags:")) {
                 String value = line.substring("tags:".length()).trim();
                 value = value.substring(1, value.length() - 1);

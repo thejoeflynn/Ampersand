@@ -125,6 +125,26 @@ public class Notes1 {
         return true;
     }
 
+    private static boolean readNote(Path notesDir, String noteId) {
+        Path notesSubdir = notesDir.resolve("notes");
+        Path searchDir = Files.exists(notesSubdir) ? notesSubdir : notesDir;
+
+        try {
+            Note note = Notes2.readNote(searchDir, noteId);
+            System.out.println("Title:    " + note.getTitle());
+            if (note.getAuthor() != null) System.out.println("Author:   " + note.getAuthor());
+            if (note.getCreated() != null) System.out.println("Created:  " + note.getCreated());
+            if (note.getModified() != null) System.out.println("Modified: " + note.getModified());
+            if (note.getTags() != null) System.out.println("Tags:     " + note.getTags());
+            System.out.println();
+            System.out.println(note.getContent());
+            return true;
+        } catch (IOException e) {
+            System.err.println("Error reading note '" + noteId + "': " + e.getMessage());
+            return false;
+        }
+    }
+
     private static void showHelp() {
         String helpText = String.format("""
                 Future Proof Notes Manager v0.1
@@ -132,8 +152,9 @@ public class Notes1 {
                 Usage: java Notes1 [command]
 
                 Available commands:
-                  help    - Display this help information
-                  list    - List all notes in the notes directory
+                  help        - Display this help information
+                  list        - List all notes in the notes directory
+                  read <id>   - Read and display a note by id
 
                 Notes directory: %s
 
@@ -173,6 +194,14 @@ public class Notes1 {
             case "list":
                 boolean success = listNotes(notesDir);
                 finish(success ? 0 : 1);
+                break;
+            case "read":
+                if (args.length < 2) {
+                    System.err.println("Usage: java Notes1 read <id>");
+                    finish(1);
+                }
+                boolean readSuccess = readNote(notesDir, args[1]);
+                finish(readSuccess ? 0 : 1);
                 break;
             default:
                 System.err.println("Error: Unknown command '" + command + "'");

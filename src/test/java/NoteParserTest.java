@@ -72,6 +72,19 @@ class NoteParserTest {
     }
 
     @Test
+    void parsesCreatedWithZuluSuffix() {
+        String input = """
+                ---
+                title: My Note
+                created: 2025-05-18T09:15:00Z
+                ---
+                Body
+                """;
+        Note note = NoteParser.parse(input);
+        assertEquals(LocalDateTime.of(2025, 5, 18, 9, 15), note.getCreated());
+    }
+
+    @Test
     void parsesBodyContent(){
         String input = """
                 ---

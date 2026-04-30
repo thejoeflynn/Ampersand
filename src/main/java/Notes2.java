@@ -8,4 +8,23 @@ public class Notes2 {
         String content = Files.readString(noteFile);
         return NoteParser.parse(content);
     }
+
+    public static void writeNote(Path notesDir, String noteId, Note note) throws IOException {
+        Path noteFile = notesDir.resolve(noteId + ".md");
+        String content = NoteSerializer.serialize(note);
+        Files.writeString(noteFile, content);
+    }
+
+    public static void updateNote(Path notesDir, String noteId, String newContent) throws IOException {
+        Note existing = readNote(notesDir, noteId);
+        Note updated = new Note(
+            existing.getTitle(),
+            newContent,
+            existing.getAuthor(),
+            existing.getCreated(),
+            existing.getModified(),
+            existing.getTags()
+        );
+        writeNote(notesDir, noteId, updated);
+    }
 }

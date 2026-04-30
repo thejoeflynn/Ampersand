@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -145,6 +146,39 @@ public class Notes1 {
         }
     }
 
+    private static boolean newNote(Path notesDir, String noteId) {
+        Path notesSubdir = notesDir.resolve("notes");
+        Path searchDir = Files.exists(notesSubdir) ? notesSubdir : notesDir;
+
+        try {
+            if (!Files.exists(searchDir)) {
+                Files.createDirectories(searchDir);
+            }
+            LocalDateTime now = LocalDateTime.now();
+            Note note = new Note(noteId, "", null, now, now, null);
+            Notes2.writeNote(searchDir, noteId, note);
+            System.out.println("Created note: " + noteId);
+            return true;
+        } catch (IOException e) {
+            System.err.println("Error creating note: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private static boolean updateNote(Path notesDir, String noteId, String newContent) {
+        Path notesSubdir = notesDir.resolve("notes");
+        Path searchDir = Files.exists(notesSubdir) ? notesSubdir : notesDir;
+
+        try {
+            Notes2.updateNote(searchDir, noteId, newContent);
+            System.out.println("Updated note: " + noteId);
+            return true;
+        } catch (IOException e) {
+            System.err.println("Error updating note: " + e.getMessage());
+            return false;
+        }
+    }
+
     private static void showHelp() {
         String helpText = String.format("""
                 Future Proof Notes Manager v0.1
@@ -155,6 +189,8 @@ public class Notes1 {
                   help        - Display this help information
                   list        - List all notes in the notes directory
                   read <id>   - Read and display a note by id
+                  new <id>    - Create a new note with the given id
+                  update <id> <content...> - Replace a note's body content
 
                 Notes directory: %s
 
@@ -202,6 +238,23 @@ public class Notes1 {
                 }
                 boolean readSuccess = readNote(notesDir, args[1]);
                 finish(readSuccess ? 0 : 1);
+                break;
+            case "new":
+                if (args.length < 2) {
+                    System.err.println("Usage: java Notes1 new <id>");
+                    finish(1);
+                }
+                boolean newSuccess = newNote(notesDir, args[1]);
+                finish(newSuccess ? 0 : 1);
+                break;
+            case "update":
+                if (args.length < 3) {
+                    System.err.println("Usage: java Notes1 update <id> <content...>");
+                    finish(1);
+                }
+                String newContent = String.join(" ", java.util.Arrays.copyOfRange(args, 2, args.length));
+                boolean updateSuccess = updateNote(notesDir, args[1], newContent);
+                finish(updateSuccess ? 0 : 1);
                 break;
             default:
                 System.err.println("Error: Unknown command '" + command + "'");

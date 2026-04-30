@@ -4,6 +4,9 @@ public class Note {
     private String content;
 
     public Note(String title, String content) {
+        if (title == null || title.isEmpty()) {
+            throw new IllegalArgumentException("Title cannot be empty");
+        }
         this.title = title;
         this.content = content;
     }

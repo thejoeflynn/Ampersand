@@ -58,4 +58,20 @@ class Notes2Test {
         assertTrue(written.contains("New better sleeker generally cooler paragraph"));
         assertFalse(written.contains("Original Paragraph"));
     }
+
+    @Test
+    void deleteNote_removesFileFromDisk(@TempDir Path tempDir) throws Exception {
+        Path noteFile = tempDir.resolve("doomed-note.md");
+        Files.writeString(noteFile, """
+                ---
+                title: Doomed
+                ---
+                Body
+                """);
+        assertTrue(Files.exists(noteFile));
+
+        Notes2.deleteNote(tempDir, "doomed-note");
+
+        assertFalse(Files.exists(noteFile));
+    }
 }

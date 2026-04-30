@@ -27,4 +27,9 @@ public class Notes2 {
         );
         writeNote(notesDir, noteId, updated);
     }
+
+    public static void deleteNote(Path notesDir, String noteId) throws IOException {
+        Path noteFile = notesDir.resolve(noteId + ".md");
+        Files.delete(noteFile);
+    }
 }

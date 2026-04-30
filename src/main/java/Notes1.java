@@ -179,6 +179,20 @@ public class Notes1 {
         }
     }
 
+    private static boolean deleteNote(Path notesDir, String noteId) {
+        Path notesSubdir = notesDir.resolve("notes");
+        Path searchDir = Files.exists(notesSubdir) ? notesSubdir : notesDir;
+
+        try {
+            Notes2.deleteNote(searchDir, noteId);
+            System.out.println("Deleted note: " + noteId);
+            return true;
+        } catch (IOException e) {
+            System.err.println("Error deleting note: " + e.getMessage());
+            return false;
+        }
+    }
+
     private static void showHelp() {
         String helpText = String.format("""
                 Future Proof Notes Manager v0.1
@@ -191,6 +205,7 @@ public class Notes1 {
                   read <id>   - Read and display a note by id
                   new <id>    - Create a new note with the given id
                   update <id> <content...> - Replace a note's body content
+                  delete <id> - Delete a note by id
 
                 Notes directory: %s
 
@@ -255,6 +270,14 @@ public class Notes1 {
                 String newContent = String.join(" ", java.util.Arrays.copyOfRange(args, 2, args.length));
                 boolean updateSuccess = updateNote(notesDir, args[1], newContent);
                 finish(updateSuccess ? 0 : 1);
+                break;
+            case "delete":
+                if (args.length < 2) {
+                    System.err.println("Usage: java Notes1 delete <id>");
+                    finish(1);
+                }
+                boolean deleteSuccess = deleteNote(notesDir, args[1]);
+                finish(deleteSuccess ? 0 : 1);
                 break;
             default:
                 System.err.println("Error: Unknown command '" + command + "'");

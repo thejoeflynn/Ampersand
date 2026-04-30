@@ -1,4 +1,5 @@
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Note {
 
@@ -7,8 +8,9 @@ public class Note {
     private String author;
     private LocalDateTime created;
     private LocalDateTime modified;
+    private List<String> tags;
 
-    public Note(String title, String content, String author, LocalDateTime created, LocalDateTime modified) {
+    public Note(String title, String content, String author, LocalDateTime created, LocalDateTime modified, List<String> tags) {
         if (title == null || title.isEmpty()) {
             throw new IllegalArgumentException("Title cannot be empty");
         }
@@ -17,6 +19,7 @@ public class Note {
         this.author = author;
         this.created = created;
         this.modified = modified;
+        this.tags = tags;
     }
 
     public String getTitle() {
@@ -37,5 +40,9 @@ public class Note {
 
     public LocalDateTime getModified() {
         return modified;
+    }
+
+    public List<String> getTags() {
+        return tags;
     }
 }

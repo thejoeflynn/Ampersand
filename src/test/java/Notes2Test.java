@@ -3,6 +3,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -57,6 +58,18 @@ class Notes2Test {
         assertTrue(written.contains("title: My Note"));
         assertTrue(written.contains("New better sleeker generally cooler paragraph"));
         assertFalse(written.contains("Original Paragraph"));
+    }
+
+    @Test
+    void updateNote_bumpsModifiedTimestamp(@TempDir Path tempDir) throws Exception {
+        LocalDateTime oldModified = LocalDateTime.of(2020, 1, 1, 0, 0);
+        Note original = new Note("My Note", "Old body", null, null, oldModified, null);
+        Notes2.writeNote(tempDir, "my-note", original);
+
+        Notes2.updateNote(tempDir, "my-note", "New body");
+
+        Note updated = Notes2.readNote(tempDir, "my-note");
+        assertTrue(updated.getModified().isAfter(oldModified));
     }
 
     @Test

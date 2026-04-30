@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 
 public class Notes2 {
     public static Note readNote(Path notesDir, String noteId) throws IOException {
@@ -22,7 +23,7 @@ public class Notes2 {
             newContent,
             existing.getAuthor(),
             existing.getCreated(),
-            existing.getModified(),
+            LocalDateTime.now(),
             existing.getTags()
         );
         writeNote(notesDir, noteId, updated);

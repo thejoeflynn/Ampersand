@@ -55,4 +55,25 @@ public class Notes2 {
 
         return results;
     }
+
+    public static List<Note> search(Path notesDir, String query) throws IOException {
+        List<Note> results = new ArrayList<>();
+        String lowerQuery = query.toLowerCase();
+
+        List<Path> files;
+        try (Stream<Path> paths = Files.list(notesDir)) {
+            files = paths.filter(p -> p.getFileName().toString().endsWith(".md")).toList();
+        }
+
+        for (Path file : files) {
+            Note note = NoteParser.parse(Files.readString(file));
+            boolean titleMatch = note.getTitle() != null && note.getTitle().toLowerCase().contains(lowerQuery);
+            boolean contentMatch = note.getContent() != null && note.getContent().toLowerCase().contains(lowerQuery);
+            if (titleMatch || contentMatch) {
+                results.add(note);
+            }
+        }
+
+        return results;
+    }
 }

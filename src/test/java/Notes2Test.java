@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import java.beans.Transient;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
@@ -111,4 +112,48 @@ class Notes2Test {
 
         assertEquals(2, results.size());
     }
+    
+
+    @Test
+    void search_findsBodyMatches(@TempDir Path tempDir) throws Exception {
+        Files.writeString(tempDir.resolve("a.md"), """
+                ---
+                title: First Note
+                ---
+                This is a note about the Phillies
+                """);
+        Files.writeString(tempDir.resolve("b.md"), """
+                ---
+                title: Second Note
+                ---
+                This is a note about the Eagles.
+                """);
+        List<Note> results = Notes2.search(tempDir, "Phillies");
+
+        assertEquals(1, results.size());
+        assertEquals("First Note", results.get(0).getTitle());
+    }
+
+    @Test
+    void search_findsTitleMatches(@TempDir Path tempDir) throws Exception {
+        Files.writeString(tempDir.resolve("a.md"), """
+                ---
+                title: Phillies Roster
+                ---
+                Lineup for opening day.
+                """);
+        Files.writeString(tempDir.resolve("b.md"), """
+                ---
+                title: Eagles Notes
+                ---
+                Thoughts on the season.
+                """);
+
+        List<Note> results = Notes2.search(tempDir, "phillies");
+
+        assertEquals(1, results.size());
+        assertEquals("Phillies Roster", results.get(0).getTitle());
+    }
+
+
 }

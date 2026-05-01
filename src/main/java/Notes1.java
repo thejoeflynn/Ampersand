@@ -202,6 +202,40 @@ public class Notes1 {
         }
     }
 
+    private static boolean editNote(Path notesDir, String noteId) {
+        Path notesSubdir = notesDir.resolve("notes");
+        Path searchDir = Files.exists(notesSubdir) ? notesSubdir : notesDir;
+
+        try {
+            Note existing = Notes2.readNote(searchDir, noteId);
+            Path tempFile = Files.createTempFile("ampersand-edit-", ".md");
+            Files.writeString(tempFile, existing.getContent());
+
+            String editor = System.getenv("EDITOR");
+            if (editor == null || editor.isEmpty()) editor = "vi";
+
+            ProcessBuilder pb = new ProcessBuilder(editor, tempFile.toString());
+            pb.inheritIO();
+            int exitCode = pb.start().waitFor();
+
+            if (exitCode != 0) {
+                Files.deleteIfExists(tempFile);
+                System.err.println("Editor exited due to error.");
+                return false;
+            }
+
+            String newContent = Files.readString(tempFile);
+            Files.deleteIfExists(tempFile);
+
+            Notes2.updateNote(searchDir, noteId, newContent);
+            System.out.println("Updated note: " + noteId);
+            return true;
+        } catch (IOException | InterruptedException e) {
+            System.err.println("Error editing note: " + e.getMessage());
+            return false;
+        }
+    }
+
     private static boolean searchNotes(Path notesDir, String query) {
         Path notesSubdir = notesDir.resolve("notes");
         Path searchDir = Files.exists(notesSubdir) ? notesSubdir : notesDir;
@@ -237,6 +271,7 @@ public class Notes1 {
                   update <id> <content...> - Replace a note's body content
                   delete <id> - Delete a note by id
                   search <query> - Search notes by title (case-insensitive)
+                  edit <id>   - Open a note in your $EDITOR for interactive editing
 
                 Notes directory: %s
 
@@ -317,6 +352,14 @@ public class Notes1 {
                 }
                 boolean searchSuccess = searchNotes(notesDir, args[1]);
                 finish(searchSuccess ? 0 : 1);
+                break;
+            case "edit":
+                if (args.length < 2) {
+                    System.err.println("Usage: java Notes1 edit <id>");
+                    finish(1);
+                }
+                boolean editSuccess = editNote(notesDir, args[1]);
+                finish(editSuccess ? 0 : 1);
                 break;
             default:
                 System.err.println("Error: Unknown command '" + command + "'");

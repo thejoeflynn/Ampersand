@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.stream.Stream;
 
 /**
@@ -182,6 +183,14 @@ public class Notes1 {
     private static boolean deleteNote(Path notesDir, String noteId) {
         Path notesSubdir = notesDir.resolve("notes");
         Path searchDir = Files.exists(notesSubdir) ? notesSubdir : notesDir;
+
+        System.out.print("Delete note '" + noteId + "'? (y/N): ");
+        Scanner scanner = new Scanner(System.in);
+        String answer = scanner.nextLine().trim().toLowerCase();
+        if (!answer.equals("y") && !answer.equals("yes")) {
+            System.out.println("Cancelled.");
+            return true;
+        }
 
         try {
             Notes2.deleteNote(searchDir, noteId);

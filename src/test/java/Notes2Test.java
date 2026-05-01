@@ -155,5 +155,28 @@ class Notes2Test {
         assertEquals("Phillies Roster", results.get(0).getTitle());
     }
 
+    @Test
+    void search_findsTagMatches(@TempDir Path tempDir) throws Exception {
+        Files.writeString(tempDir.resolve("a.md"), """
+                ---
+                title: Game Recap
+                tags: [baseball, phillies]
+                ---
+                Walk-off in the ninth by Alec Bohm.
+                """);
+        Files.writeString(tempDir.resolve("b.md"), """
+                ---
+                title: Movie Night
+                tags: [film, drama]
+                ---
+                John Wick 4 goated.
+                """);
+
+        List<Note> results = Notes2.search(tempDir, "phillies");
+
+        assertEquals(1, results.size());
+        assertEquals("Game Recap", results.get(0).getTitle());
+    }
+
 
 }

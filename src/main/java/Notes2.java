@@ -69,7 +69,9 @@ public class Notes2 {
             Note note = NoteParser.parse(Files.readString(file));
             boolean titleMatch = note.getTitle() != null && note.getTitle().toLowerCase().contains(lowerQuery);
             boolean contentMatch = note.getContent() != null && note.getContent().toLowerCase().contains(lowerQuery);
-            if (titleMatch || contentMatch) {
+            boolean tagMatch = note.getTags() != null && note.getTags().stream()
+                    .anyMatch(tag -> tag.toLowerCase().contains(lowerQuery));
+            if (titleMatch || contentMatch || tagMatch) {
                 results.add(note);
             }
         }

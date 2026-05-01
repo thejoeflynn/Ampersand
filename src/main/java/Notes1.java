@@ -241,7 +241,7 @@ public class Notes1 {
         Path searchDir = Files.exists(notesSubdir) ? notesSubdir : notesDir;
 
         try {
-            List<Note> results = Notes2.searchByTitle(searchDir, query);
+            List<Note> results = Notes2.search(searchDir, query);
             if (results.isEmpty()) {
                 System.out.println("No notes match '" + query + "'.");
                 return true;

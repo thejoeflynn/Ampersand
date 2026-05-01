@@ -202,6 +202,27 @@ public class Notes1 {
         }
     }
 
+    private static boolean searchNotes(Path notesDir, String query) {
+        Path notesSubdir = notesDir.resolve("notes");
+        Path searchDir = Files.exists(notesSubdir) ? notesSubdir : notesDir;
+
+        try {
+            List<Note> results = Notes2.searchByTitle(searchDir, query);
+            if (results.isEmpty()) {
+                System.out.println("No notes match '" + query + "'.");
+                return true;
+            }
+            System.out.println("Found " + results.size() + " note(s) matching '" + query + "':");
+            for (Note note : results) {
+                System.out.println("  - " + note.getTitle());
+            }
+            return true;
+        } catch (IOException e) {
+            System.err.println("Error searching: " + e.getMessage());
+            return false;
+        }
+    }
+
     private static void showHelp() {
         String helpText = String.format("""
                 Future Proof Notes Manager v0.1
@@ -215,6 +236,7 @@ public class Notes1 {
                   new <id>    - Create a new note with the given id
                   update <id> <content...> - Replace a note's body content
                   delete <id> - Delete a note by id
+                  search <query> - Search notes by title (case-insensitive)
 
                 Notes directory: %s
 
@@ -287,6 +309,14 @@ public class Notes1 {
                 }
                 boolean deleteSuccess = deleteNote(notesDir, args[1]);
                 finish(deleteSuccess ? 0 : 1);
+                break;
+            case "search":
+                if (args.length < 2) {
+                    System.err.println("Usage: java Notes1 search <query>");
+                    finish(1);
+                }
+                boolean searchSuccess = searchNotes(notesDir, args[1]);
+                finish(searchSuccess ? 0 : 1);
                 break;
             default:
                 System.err.println("Error: Unknown command '" + command + "'");

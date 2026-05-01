@@ -2,6 +2,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
 public class Notes2 {
     public static Note readNote(Path notesDir, String noteId) throws IOException {
@@ -32,5 +35,24 @@ public class Notes2 {
     public static void deleteNote(Path notesDir, String noteId) throws IOException {
         Path noteFile = notesDir.resolve(noteId + ".md");
         Files.delete(noteFile);
+    }
+
+    public static List<Note> searchByTitle(Path notesDir, String query) throws IOException {
+        List<Note> results = new ArrayList<>();
+        String lowerQuery = query.toLowerCase();
+
+        List<Path> files;
+        try (Stream<Path> paths = Files.list(notesDir)) {
+            files = paths.filter(p -> p.getFileName().toString().endsWith(".md")).toList();
+        }
+
+        for (Path file : files) {
+            Note note = NoteParser.parse(Files.readString(file));
+            if (note.getTitle() != null && note.getTitle().toLowerCase().contains(lowerQuery)) {
+                results.add(note);
+            }
+        }
+
+        return results;
     }
 }

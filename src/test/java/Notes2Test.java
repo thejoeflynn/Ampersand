@@ -88,4 +88,27 @@ class Notes2Test {
 
         assertFalse(Files.exists(noteFile));
     }
+
+    @Test
+    void searchByTitle_returnsMatchingNotes(@TempDir Path tempDir) throws Exception {
+        Files.writeString(tempDir.resolve("a.md"), """
+                ---
+                title: Java Tips
+                ---
+                """);
+        Files.writeString(tempDir.resolve("b.md"), """
+                ---
+                title: Python Notes
+                ---
+                """);
+        Files.writeString(tempDir.resolve("c.md"), """
+                ---
+                title: Java Snippets
+                ---
+                """);
+
+        List<Note> results = Notes2.searchByTitle(tempDir, "java");
+
+        assertEquals(2, results.size());
+    }
 }

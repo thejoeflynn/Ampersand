@@ -4,6 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- Inherit Spring Boot defaults: managed dependency versions, plugin config, etc. -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.5</version>
+        <relativePath/>
+    </parent>
+
     <!-- Project identity: who made it, what it's called, what version -->
     <groupId>com.ampersand</groupId>
     <artifactId>ampersand-notes</artifactId>
@@ -22,6 +30,12 @@
 
     <!-- Libraries this project depends on -->
     <dependencies>
+        <!-- Spring Boot: the web server framework -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
         <!-- JUnit 5: the testing framework -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -39,6 +53,12 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
+            </plugin>
+
+            <!-- Spring Boot: lets us run the server with `mvn spring-boot:run` -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

@@ -1,3 +1,5 @@
+package com.ampersand;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 

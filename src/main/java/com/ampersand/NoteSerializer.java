@@ -1,3 +1,5 @@
+package com.ampersand;
+
 public class NoteSerializer {
     public static String serialize(Note note) {
         StringBuilder sb = new StringBuilder();

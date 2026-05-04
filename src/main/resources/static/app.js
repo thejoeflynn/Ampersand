@@ -18,6 +18,7 @@ const els = {
     jotsInput: document.getElementById("jots-input"),
     folderList: document.getElementById("folder-list"),
     jotsFolder: document.querySelector(".jots-folder"),
+    newNoteBtn: document.getElementById("new-note-btn"),
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -26,7 +27,44 @@ document.addEventListener("DOMContentLoaded", () => {
     els.jotsInput.addEventListener("keydown", onJotsKeydown);
     els.folderList.addEventListener("click", onFolderClick);
     els.jotsFolder.addEventListener("click", () => selectFolder("Jots"));
+    els.newNoteBtn.addEventListener("click", createNewNote);
 });
+
+// ---------- New note ----------
+
+async function createNewNote() {
+    const targetFolder = state.activeFolder === "Jots" ? "Work" : state.activeFolder;
+    const id = "note-" + Date.now().toString(36);
+
+    try {
+        const res = await fetch(API, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                id,
+                title: "Untitled",
+                content: "",
+                author: null,
+                tags: [],
+                folder: targetFolder,
+            }),
+        });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        await loadNotes();
+        if (state.activeFolder !== targetFolder) selectFolder(targetFolder);
+        state.activeNoteId = id;
+        await loadNoteDetail(id);
+
+        const titleInput = els.noteDisplay.querySelector(".note-title-input");
+        if (titleInput) {
+            titleInput.focus();
+            titleInput.select();
+        }
+    } catch (err) {
+        console.error("Failed to create note:", err);
+        alert("Couldn't create note: " + err.message);
+    }
+}
 
 // ---------- Folders ----------
 

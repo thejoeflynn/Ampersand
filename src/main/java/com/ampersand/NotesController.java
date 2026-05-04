@@ -63,7 +63,7 @@ public class NotesController {
     }
 
     @GetMapping("/search")
-    public List<Note> search(@RequestParam String q) throws IOException {
+    public List<NoteSummary> search(@RequestParam String q) throws IOException {
         return Notes2.search(NOTES_DIR, q);
     }
 }

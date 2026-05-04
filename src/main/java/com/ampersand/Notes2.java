@@ -78,13 +78,13 @@ public class Notes2 {
         return results;
     }
 
-    public static List<Note> search(Path notesDir, String query) throws IOException {
-        List<Note> results = new ArrayList<>();
+    public static List<NoteSummary> search(Path notesDir, String query) throws IOException {
+        List<NoteSummary> results = new ArrayList<>();
         String lowerQuery = query.toLowerCase();
 
         List<Path> files;
         try (Stream<Path> paths = Files.list(notesDir)) {
-            files = paths.filter(p -> p.getFileName().toString().endsWith(".md")).toList();
+            files = paths.filter(p -> p.getFileName().toString().endsWith(".md")).sorted().toList();
         }
 
         for (Path file : files) {
@@ -94,7 +94,9 @@ public class Notes2 {
             boolean tagMatch = note.getTags() != null && note.getTags().stream()
                     .anyMatch(tag -> tag.toLowerCase().contains(lowerQuery));
             if (titleMatch || contentMatch || tagMatch) {
-                results.add(note);
+                String name = file.getFileName().toString();
+                String id = name.substring(0, name.length() - 3);
+                results.add(NoteSummary.from(id, note));
             }
         }
 

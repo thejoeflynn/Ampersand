@@ -19,6 +19,7 @@ const els = {
     folderList: document.getElementById("folder-list"),
     jotsFolder: document.querySelector(".jots-folder"),
     newNoteBtn: document.getElementById("new-note-btn"),
+    searchInput: document.getElementById("search-input"),
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -28,7 +29,45 @@ document.addEventListener("DOMContentLoaded", () => {
     els.folderList.addEventListener("click", onFolderClick);
     els.jotsFolder.addEventListener("click", () => selectFolder("Jots"));
     els.newNoteBtn.addEventListener("click", createNewNote);
+    els.searchInput.addEventListener("input", scheduleSearch);
 });
+
+// ---------- Search ----------
+
+let searchTimer = null;
+function scheduleSearch() {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(runSearch, 200);
+}
+
+async function runSearch() {
+    const q = els.searchInput.value.trim();
+    if (!q) {
+        renderNoteList();
+        return;
+    }
+    try {
+        const res = await fetch(`${API}/search?q=${encodeURIComponent(q)}`);
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const results = await res.json();
+        renderSearchResults(results, q);
+    } catch (err) {
+        console.error("Search failed:", err);
+    }
+}
+
+function renderSearchResults(results, query) {
+    if (results.length === 0) {
+        els.notesList.innerHTML = `<li class="note-item placeholder">No matches for "${escapeHtml(query)}".</li>`;
+        return;
+    }
+    els.notesList.innerHTML = results.map(note => `
+        <li class="note-item ${note.id === state.activeNoteId ? "active" : ""}" data-note-id="${escapeHtml(note.id)}">
+            <div class="note-item-title">${escapeHtml(note.title || "(untitled)")}</div>
+            <div class="note-item-preview">${escapeHtml(getPreview(note.content))}</div>
+        </li>
+    `).join("");
+}
 
 // ---------- New note ----------
 

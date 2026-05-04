@@ -130,10 +130,10 @@ class Notes2Test {
                 ---
                 This is a note about the Eagles.
                 """);
-        List<Note> results = Notes2.search(tempDir, "Phillies");
+        List<NoteSummary> results = Notes2.search(tempDir, "Phillies");
 
         assertEquals(1, results.size());
-        assertEquals("First Note", results.get(0).getTitle());
+        assertEquals("First Note", results.get(0).title());
     }
 
     @Test
@@ -151,10 +151,10 @@ class Notes2Test {
                 Thoughts on the season.
                 """);
 
-        List<Note> results = Notes2.search(tempDir, "phillies");
+        List<NoteSummary> results = Notes2.search(tempDir, "phillies");
 
         assertEquals(1, results.size());
-        assertEquals("Phillies Roster", results.get(0).getTitle());
+        assertEquals("Phillies Roster", results.get(0).title());
     }
 
     @Test
@@ -174,10 +174,10 @@ class Notes2Test {
                 John Wick 4 goated.
                 """);
 
-        List<Note> results = Notes2.search(tempDir, "phillies");
+        List<NoteSummary> results = Notes2.search(tempDir, "phillies");
 
         assertEquals(1, results.size());
-        assertEquals("Game Recap", results.get(0).getTitle());
+        assertEquals("Game Recap", results.get(0).title());
     }
 
     @Test

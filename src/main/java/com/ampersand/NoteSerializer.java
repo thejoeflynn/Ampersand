@@ -8,6 +8,9 @@ public class NoteSerializer {
         if (note.getAuthor() != null) {
             sb.append("author: ").append(note.getAuthor()).append("\n");
         }
+        if (note.getFolder() != null) {
+            sb.append("folder: ").append(note.getFolder()).append("\n");
+        }
         if (note.getCreated() != null) {
             sb.append("created: ").append(note.getCreated()).append("\n");
         }

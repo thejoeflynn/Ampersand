@@ -11,6 +11,7 @@ public class NoteParser {
         LocalDateTime created = null;
         LocalDateTime modified = null;
         List<String> tags = null;
+        String folder = null;
         StringBuilder body = new StringBuilder();
 
         boolean seenOpener = false;
@@ -30,6 +31,8 @@ public class NoteParser {
                 title = line.substring("title:".length()).trim();
             } else if (line.startsWith("author:")) {
                 author = line.substring("author:".length()).trim();
+            } else if (line.startsWith("folder:")) {
+                folder = line.substring("folder:".length()).trim();
             } else if (line.startsWith("created:")) {
                 String value = line.substring("created:".length()).trim();
                 if (value.endsWith("Z")) value = value.substring(0, value.length() - 1);
@@ -47,6 +50,6 @@ public class NoteParser {
                 }
             }
         }
-        return new Note(title, body.toString(), author, created, modified, tags);
+        return new Note(title, body.toString(), author, created, modified, tags, folder);
     }
 }

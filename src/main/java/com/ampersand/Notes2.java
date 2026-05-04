@@ -58,16 +58,21 @@ public class Notes2 {
         return results;
     }
 
-    public static List<Note> listAll(Path notesDir) throws IOException {
-        List<Note> results = new ArrayList<>();
+    public static List<NoteSummary> listAll(Path notesDir) throws IOException {
+        List<NoteSummary> results = new ArrayList<>();
 
         List<Path> files;
         try (Stream<Path> paths = Files.list(notesDir)) {
-            files = paths.filter(p -> p.getFileName().toString().endsWith(".md")).toList();
+            files = paths.filter(p -> p.getFileName().toString().endsWith(".md"))
+                         .sorted()
+                         .toList();
         }
 
         for (Path file : files) {
-            results.add(NoteParser.parse(Files.readString(file)));
+            String name = file.getFileName().toString();
+            String id = name.substring(0, name.length() - 3); // strip ".md"
+            Note note = NoteParser.parse(Files.readString(file));
+            results.add(NoteSummary.from(id, note));
         }
 
         return results;

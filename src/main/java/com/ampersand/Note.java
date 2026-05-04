@@ -11,8 +11,14 @@ public class Note {
     private LocalDateTime created;
     private LocalDateTime modified;
     private List<String> tags;
+    private String folder;
 
+    /** Backward-compatible 6-arg constructor; folder defaults to null. */
     public Note(String title, String content, String author, LocalDateTime created, LocalDateTime modified, List<String> tags) {
+        this(title, content, author, created, modified, tags, null);
+    }
+
+    public Note(String title, String content, String author, LocalDateTime created, LocalDateTime modified, List<String> tags, String folder) {
         if (title == null || title.isEmpty()) {
             throw new IllegalArgumentException("Title cannot be empty");
         }
@@ -22,6 +28,7 @@ public class Note {
         this.created = created;
         this.modified = modified;
         this.tags = tags;
+        this.folder = folder;
     }
 
     public String getTitle() {
@@ -46,5 +53,9 @@ public class Note {
 
     public List<String> getTags() {
         return tags;
+    }
+
+    public String getFolder() {
+        return folder;
     }
 }

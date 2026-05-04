@@ -201,7 +201,7 @@ class Notes2Test {
                 Body C
                 """);
 
-        List<Note> results = Notes2.listAll(tempDir);
+        List<NoteSummary> results = Notes2.listAll(tempDir);
 
         assertEquals(3, results.size());
     }

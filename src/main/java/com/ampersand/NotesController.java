@@ -22,7 +22,7 @@ public class NotesController {
     private static final Path NOTES_DIR = Path.of(System.getProperty("user.home"), ".notes", "notes");
 
     @GetMapping
-    public List<Note> listAll() throws IOException {
+    public List<NoteSummary> listAll() throws IOException {
         return Notes2.listAll(NOTES_DIR);
     }
 
@@ -34,7 +34,8 @@ public class NotesController {
     @PostMapping
     public Note create(@RequestBody NoteRequest req) throws IOException {
         LocalDateTime now = LocalDateTime.now();
-        Note note = new Note(req.title(), req.content(), req.author(), now, now, req.tags());
+        String folder = req.folder() != null ? req.folder() : "Work";
+        Note note = new Note(req.title(), req.content(), req.author(), now, now, req.tags(), folder);
         Notes2.writeNote(NOTES_DIR, req.id(), note);
         return note;
     }
@@ -42,13 +43,15 @@ public class NotesController {
     @PutMapping("/{id}")
     public Note update(@PathVariable String id, @RequestBody NoteRequest req) throws IOException {
         Note existing = Notes2.readNote(NOTES_DIR, id);
+        String folder = req.folder() != null ? req.folder() : existing.getFolder();
         Note updated = new Note(
             req.title(),
             req.content(),
             req.author(),
             existing.getCreated(),
             LocalDateTime.now(),
-            req.tags()
+            req.tags(),
+            folder
         );
         Notes2.writeNote(NOTES_DIR, id, updated);
         return updated;

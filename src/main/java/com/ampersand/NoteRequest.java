@@ -7,5 +7,6 @@ public record NoteRequest(
     String title,
     String content,
     String author,
-    List<String> tags
+    List<String> tags,
+    String folder
 ) {}

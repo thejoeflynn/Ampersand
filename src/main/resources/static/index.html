@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ampersand</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="logo-section">
+            <span class="logo">&amp;</span>
+        </div>
+        <div class="jots-bar">
+            <div class="jots-note">
+                <svg class="jots-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+                </svg>
+                <input type="text" id="jots-input" placeholder="Jot down an idea." />
+            </div>
+        </div>
+        <div class="header-controls">
+            <button id="font-toggle-btn" title="Toggle font">Aa</button>
+        </div>
+    </header>
+
+    <main class="app-body">
+        <aside class="folder-sidebar">
+            <div class="jots-section">
+                <button class="jots-folder" type="button" data-folder="Jots">
+                    <svg class="jots-folder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+                    </svg>
+                    <span>Jots</span>
+                </button>
+            </div>
+            <h2>Folders</h2>
+            <ul id="folder-list">
+                <li class="folder-item active" data-folder="Work">Work</li>
+                <li class="folder-item" data-folder="Personal">Personal</li>
+            </ul>
+        </aside>
+
+        <section class="note-list-pane">
+            <h2 id="current-folder-label">Work</h2>
+            <div class="search-bar">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="search-input" placeholder="Search notes…" />
+            </div>
+            <ul id="notes-list">
+                <li class="note-item placeholder">No notes yet — try jotting something above.</li>
+            </ul>
+        </section>
+
+        <section class="note-content-pane">
+            <div id="note-display">
+                <p class="placeholder-text">Pick a note to read.</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="/app.js"></script>
+</body>
+</html>

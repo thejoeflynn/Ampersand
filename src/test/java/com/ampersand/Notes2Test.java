@@ -180,5 +180,31 @@ class Notes2Test {
         assertEquals("Game Recap", results.get(0).getTitle());
     }
 
+    @Test
+    void listAll_returnsAllNotes(@TempDir Path tempDir) throws Exception {
+        Files.writeString(tempDir.resolve("a.md"), """
+                ---
+                title: First
+                ---
+                Body A
+                """);
+        Files.writeString(tempDir.resolve("b.md"), """
+                ---
+                title: Second
+                ---
+                Body B
+                """);
+        Files.writeString(tempDir.resolve("c.md"), """
+                ---
+                title: Third
+                ---
+                Body C
+                """);
+
+        List<Note> results = Notes2.listAll(tempDir);
+
+        assertEquals(3, results.size());
+    }
+
 
 }

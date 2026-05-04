@@ -58,6 +58,21 @@ public class Notes2 {
         return results;
     }
 
+    public static List<Note> listAll(Path notesDir) throws IOException {
+        List<Note> results = new ArrayList<>();
+
+        List<Path> files;
+        try (Stream<Path> paths = Files.list(notesDir)) {
+            files = paths.filter(p -> p.getFileName().toString().endsWith(".md")).toList();
+        }
+
+        for (Path file : files) {
+            results.add(NoteParser.parse(Files.readString(file)));
+        }
+
+        return results;
+    }
+
     public static List<Note> search(Path notesDir, String query) throws IOException {
         List<Note> results = new ArrayList<>();
         String lowerQuery = query.toLowerCase();

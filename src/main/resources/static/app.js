@@ -30,7 +30,21 @@ document.addEventListener("DOMContentLoaded", () => {
     els.jotsFolder.addEventListener("click", () => selectFolder("Jots"));
     els.newNoteBtn.addEventListener("click", createNewNote);
     els.searchInput.addEventListener("input", scheduleSearch);
+    updateClock();
+    setInterval(updateClock, 1000);
 });
+
+// ---------- Clock ----------
+
+function updateClock() {
+    const clock = document.getElementById("clock");
+    if (!clock) return;
+    const now = new Date();
+    const time = now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+    const date = now.toLocaleDateString([], { weekday: "long", month: "long", day: "numeric" });
+    clock.querySelector(".clock-time").textContent = time;
+    clock.querySelector(".clock-date").textContent = date;
+}
 
 // ---------- Search ----------
 

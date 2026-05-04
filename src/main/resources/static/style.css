@@ -1,23 +1,32 @@
 /* ==========================================================
-   Ampersand — skeuomorphic legal-pad theme
-   Step 1: foundation. Polish comes in step 3.
+   Ampersand — Windows 7 Aero Glass
+   Subtle translucency, restrained palette, real glass feel.
    ========================================================== */
 
 :root {
-    --paper-yellow: #fdf6c0;
-    --paper-yellow-dark: #f0e3a3;
-    --paper-yellow-darker: #d9c97a;
-    --line-blue: rgba(140, 170, 215, 0.45);
-    --margin-red: #d8a0a0;
-    --leather-brown: #6b4423;
-    --leather-brown-dark: #4a2f15;
-    --leather-brown-darker: #2a1a0a;
-    --ink-black: #1a1a1a;
-    --ink-faded: #555;
+    --bg-deep: #1a3a5a;
+    --bg-mid: #2c5278;
+    --bg-light: #4a7099;
+    --bg-tint: #6892b8;
 
+    --glass-bg: rgba(255, 255, 255, 0.18);
+    --glass-bg-hover: rgba(255, 255, 255, 0.28);
+    --glass-bg-active: rgba(255, 255, 255, 0.35);
+    --glass-border: rgba(255, 255, 255, 0.35);
+    --glass-border-bright: rgba(255, 255, 255, 0.55);
+    --glass-border-soft: rgba(255, 255, 255, 0.18);
+
+    --text-light: #ffffff;
+    --text-on-glass: #f0f6fb;
+    --text-faded: rgba(240, 246, 251, 0.7);
+    --text-dim: rgba(240, 246, 251, 0.55);
+
+    --accent-aero: #6db4e0;
+    --accent-aero-deep: #3a7faf;
+
+    --font-clean: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
     --font-handwritten: "Marker Felt", "Comic Sans MS", cursive;
-    --font-clean: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    --current-font: var(--font-handwritten);
+    --current-font: var(--font-clean);
 }
 
 * {
@@ -30,27 +39,59 @@ html, body {
     height: 100%;
 }
 
+/* ---------- Background: muted Aero wallpaper ---------- */
+
 body {
     font-family: var(--current-font);
-    background: var(--leather-brown);
-    color: var(--ink-black);
+    color: var(--text-on-glass);
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    position: relative;
+    background-color: var(--bg-deep);
+    background-image:
+        /* Subtle blue tint overlay so panels contrast well over any wallpaper */
+        linear-gradient(165deg, rgba(44, 82, 120, 0.45) 0%, rgba(15, 38, 64, 0.55) 100%),
+        /* Your wallpaper — drop any image at src/main/resources/static/wallpaper.jpg */
+        url("/wallpaper.jpg"),
+        /* Fallback gradient if no wallpaper.jpg exists */
+        radial-gradient(ellipse 70% 50% at 25% 20%, rgba(140, 180, 215, 0.4) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 80%, rgba(60, 100, 145, 0.5) 0%, transparent 65%),
+        linear-gradient(165deg, var(--bg-mid) 0%, var(--bg-deep) 60%, #0f2640 100%);
+    background-size: auto, cover, auto, auto, auto;
+    background-position: center, center, center, center, center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* Very subtle large soft-light overlay to suggest depth */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse 40% 35% at 30% 30%, rgba(255, 255, 255, 0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 35% 30% at 70% 70%, rgba(255, 255, 255, 0.06) 0%, transparent 70%);
+    z-index: 0;
 }
 
 /* ---------- Header ---------- */
 
 .app-header {
-    background: linear-gradient(to bottom, var(--leather-brown), var(--leather-brown-dark));
-    color: #f5e9c8;
+    position: relative;
+    z-index: 5;
     padding: 0.75rem 1.5rem;
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    border-bottom: 4px solid var(--leather-brown-darker);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-    z-index: 10;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.08) 100%);
+    backdrop-filter: blur(16px) saturate(110%);
+    -webkit-backdrop-filter: blur(16px) saturate(110%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.4),
+        0 4px 18px rgba(0, 0, 0, 0.25);
 }
 
 .logo-section {
@@ -60,19 +101,19 @@ body {
 }
 
 .logo {
-    font-family: "Baskerville", "Garamond", "Georgia", serif;
-    font-size: 3.6rem;
+    font-family: "Segoe UI", "Baskerville", "Georgia", serif;
+    font-size: 3.4rem;
     font-weight: bold;
     line-height: 1;
-    color: #f5e9c8;
+    color: rgba(255, 255, 255, 0.92);
     text-shadow:
-        1px 1px 0 var(--leather-brown-darker),
-        2px 3px 6px rgba(0, 0, 0, 0.55);
+        0 1px 0 rgba(255, 255, 255, 0.4),
+        0 2px 6px rgba(0, 0, 0, 0.4);
     padding-left: 0.2rem;
     user-select: none;
 }
 
-/* ---------- Jots bar as a sticky note ---------- */
+/* ---------- Jots bar (glass pill, subtle blue tint) ---------- */
 
 .jots-bar {
     flex: 1;
@@ -85,33 +126,36 @@ body {
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    padding: 0.55rem 1rem;
+    padding: 0.5rem 1.2rem;
     width: 100%;
     max-width: 620px;
-    background: linear-gradient(
-        135deg,
-        #fff89a 0%,
-        #ffe96b 100%
-    );
-    border: 1px solid #d4c060;
-    transform: rotate(-1.5deg);
+    background: linear-gradient(180deg,
+        rgba(180, 215, 240, 0.28) 0%,
+        rgba(120, 165, 200, 0.18) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 9999px;
+    backdrop-filter: blur(10px) saturate(115%);
+    -webkit-backdrop-filter: blur(10px) saturate(115%);
     box-shadow:
-        2px 3px 8px rgba(0, 0, 0, 0.45),
-        inset 0 0 24px rgba(255, 220, 100, 0.3);
-    transition: transform 0.15s ease;
+        inset 0 1px 0 rgba(255, 255, 255, 0.45),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.08),
+        0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: background 0.15s ease, border-color 0.15s ease;
 }
 
 .jots-note:hover,
 .jots-note:focus-within {
-    transform: rotate(-0.5deg) translateY(-1px);
+    background: linear-gradient(180deg,
+        rgba(190, 220, 245, 0.4) 0%,
+        rgba(130, 175, 210, 0.28) 100%);
+    border-color: rgba(255, 255, 255, 0.55);
 }
 
 .jots-icon {
     width: 18px;
     height: 18px;
     flex-shrink: 0;
-    color: #6b5520;
-    transform: rotate(8deg);
+    color: rgba(255, 255, 255, 0.85);
 }
 
 .jots-note input {
@@ -119,12 +163,12 @@ body {
     background: transparent;
     border: none;
     font-family: var(--current-font);
-    font-size: 1.05rem;
-    color: var(--ink-black);
+    font-size: 1rem;
+    color: var(--text-light);
 }
 
 .jots-note input::placeholder {
-    color: var(--ink-faded);
+    color: rgba(255, 255, 255, 0.65);
     font-style: italic;
 }
 
@@ -132,15 +176,65 @@ body {
     outline: none;
 }
 
+/* ---------- Glossy header buttons (silver glass) ---------- */
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.header-clock {
+    text-align: right;
+    color: var(--text-light);
+    line-height: 1.2;
+    padding: 0.25rem 0.7rem;
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.18) 0%,
+        rgba(255, 255, 255, 0.06) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 4px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    user-select: none;
+}
+
+.clock-time {
+    font-family: var(--font-clean);
+    font-size: 1.02rem;
+    font-weight: 500;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+}
+
+.clock-date {
+    font-family: var(--font-clean);
+    font-size: 0.74rem;
+    color: var(--text-faded);
+}
+
 .header-controls button {
     font-family: var(--font-clean);
-    font-size: 1rem;
-    padding: 0.4rem 0.8rem;
-    background: var(--paper-yellow);
-    border: 2px solid var(--leather-brown-darker);
+    font-size: 0.95rem;
+    padding: 0.4rem 0.95rem;
+    color: var(--text-on-glass);
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.32) 0%,
+        rgba(255, 255, 255, 0.12) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.45);
     border-radius: 4px;
     cursor: pointer;
-    color: var(--ink-black);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.5),
+        0 1px 2px rgba(0, 0, 0, 0.18);
+}
+
+.header-controls button:hover {
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.42) 0%,
+        rgba(255, 255, 255, 0.2) 100%);
 }
 
 /* ---------- Main 3-pane layout ---------- */
@@ -149,25 +243,29 @@ body {
     display: flex;
     flex: 1;
     overflow: hidden;
+    position: relative;
+    z-index: 1;
 }
 
 .folder-sidebar,
 .note-list-pane,
 .note-content-pane {
-    background: var(--paper-yellow);
+    background: var(--glass-bg);
+    backdrop-filter: blur(14px) saturate(115%);
+    -webkit-backdrop-filter: blur(14px) saturate(115%);
     overflow-y: auto;
 }
 
 .folder-sidebar {
     width: 220px;
-    border-right: 2px solid var(--paper-yellow-darker);
     padding: 1rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.22);
 }
 
 .note-list-pane {
     width: 320px;
-    border-right: 2px solid var(--paper-yellow-darker);
     padding: 1rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.22);
 }
 
 .note-content-pane {
@@ -178,21 +276,147 @@ body {
 .folder-sidebar h2,
 .note-list-pane h2 {
     font-family: var(--font-clean);
-    font-size: 0.8rem;
-    font-weight: 700;
+    font-size: 0.76rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: #6b5520;
-    border-bottom: 1px solid var(--paper-yellow-darker);
+    letter-spacing: 0.13em;
+    color: var(--text-faded);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
     padding-bottom: 0.4rem;
     margin-bottom: 0.7rem;
 }
+
+/* ---------- Jots section in sidebar (matches header pill style) ---------- */
+
+.jots-section {
+    margin-bottom: 1.4rem;
+    padding: 0.4rem 0.2rem 0.5rem;
+}
+
+.jots-folder {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    width: 100%;
+    padding: 0.55rem 1rem;
+    background: linear-gradient(180deg,
+        rgba(180, 215, 240, 0.28) 0%,
+        rgba(120, 165, 200, 0.18) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 9999px;
+    cursor: pointer;
+    font-family: var(--current-font);
+    font-size: 0.97rem;
+    color: var(--text-light);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.45),
+        0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: background 0.15s ease, border-color 0.15s ease;
+    text-align: left;
+}
+
+.jots-folder:hover {
+    background: linear-gradient(180deg,
+        rgba(190, 220, 245, 0.4) 0%,
+        rgba(130, 175, 210, 0.28) 100%);
+    border-color: rgba(255, 255, 255, 0.55);
+}
+
+.jots-folder.active {
+    background: linear-gradient(180deg,
+        rgba(180, 215, 240, 0.5) 0%,
+        rgba(120, 165, 200, 0.35) 100%);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.jots-folder-icon {
+    width: 16px;
+    height: 16px;
+    color: rgba(255, 255, 255, 0.85);
+    flex-shrink: 0;
+}
+
+/* ---------- Folder + note list items ---------- */
+
+ul#folder-list,
+ul#notes-list {
+    list-style: none;
+}
+
+.folder-item,
+.note-item {
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 0.93rem;
+    color: var(--text-on-glass);
+}
+
+.folder-item:hover,
+.note-item:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.folder-item.active,
+.note-item.active {
+    background: linear-gradient(180deg,
+        rgba(140, 185, 220, 0.42) 0%,
+        rgba(80, 130, 175, 0.32) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding-top: calc(0.5rem - 1px);
+    padding-bottom: calc(0.5rem - 1px);
+    color: var(--text-light);
+}
+
+.note-item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.note-item.active {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.note-item-title {
+    font-family: var(--current-font);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-on-glass);
+    margin-bottom: 0.15rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.note-item.active .note-item-title {
+    color: var(--text-light);
+}
+
+.note-item-preview {
+    font-family: var(--font-clean);
+    font-size: 0.8rem;
+    color: var(--text-faded);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.note-item.placeholder {
+    color: var(--text-dim);
+    font-style: italic;
+    cursor: default;
+}
+
+.note-item.placeholder:hover {
+    background: transparent;
+}
+
+/* ---------- Note list header + new-note button ---------- */
 
 .note-list-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid var(--paper-yellow-darker);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
     padding-bottom: 0.4rem;
     margin-bottom: 0.7rem;
 }
@@ -205,91 +429,51 @@ body {
 
 .new-note-btn {
     font-family: var(--font-clean);
-    font-size: 1.3rem;
-    font-weight: 600;
+    font-size: 1.1rem;
+    font-weight: 700;
     line-height: 1;
-    padding: 0.05rem 0.55rem 0.2rem;
-    background: var(--paper-yellow-dark);
-    border: 1px solid var(--paper-yellow-darker);
+    padding: 0.05rem 0.6rem 0.2rem;
+    color: var(--text-on-glass);
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.32) 0%,
+        rgba(255, 255, 255, 0.12) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.45);
     border-radius: 4px;
     cursor: pointer;
-    color: var(--ink-black);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.5),
+        0 1px 2px rgba(0, 0, 0, 0.18);
 }
 
 .new-note-btn:hover {
-    background: var(--paper-yellow-darker);
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.42) 0%,
+        rgba(255, 255, 255, 0.2) 100%);
 }
 
-/* ---------- Jots section in sidebar (sticky-note aesthetic) ---------- */
-
-.jots-section {
-    margin-bottom: 1.4rem;
-    padding: 0.4rem 0.2rem 0.5rem;
-}
-
-.jots-folder {
-    display: flex;
-    align-items: center;
-    gap: 0.55rem;
-    width: 100%;
-    padding: 0.65rem 0.9rem;
-    background: linear-gradient(135deg, #fff89a 0%, #ffe96b 100%);
-    border: 1px solid #d4c060;
-    border-radius: 2px;
-    cursor: pointer;
-    font-family: var(--current-font);
-    font-size: 1.05rem;
-    color: var(--ink-black);
-    box-shadow:
-        1px 2px 6px rgba(0, 0, 0, 0.3),
-        inset 0 0 14px rgba(255, 220, 100, 0.25);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-    text-align: left;
-}
-
-.jots-folder:hover {
-    transform: translateY(-1px);
-    box-shadow:
-        2px 3px 9px rgba(0, 0, 0, 0.35),
-        inset 0 0 14px rgba(255, 220, 100, 0.25);
-}
-
-.jots-folder.active {
-    box-shadow:
-        2px 4px 10px rgba(0, 0, 0, 0.45),
-        inset 0 0 14px rgba(255, 220, 100, 0.4);
-}
-
-.jots-folder-icon {
-    width: 16px;
-    height: 16px;
-    color: #6b5520;
-    flex-shrink: 0;
-    transform: rotate(8deg);
-}
-
-/* ---------- Search bar (top of note list) ---------- */
+/* ---------- Search bar (clean glass rectangle) ---------- */
 
 .search-bar {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.55rem;
     margin-bottom: 0.9rem;
-    padding: 0.45rem 0.7rem;
-    background: rgba(255, 255, 255, 0.55);
-    border: 1px solid var(--paper-yellow-darker);
+    padding: 0.45rem 0.75rem;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.32);
     border-radius: 4px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .search-bar:focus-within {
-    border-color: var(--leather-brown);
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.28);
+    border-color: rgba(255, 255, 255, 0.55);
 }
 
 .search-icon {
     width: 16px;
     height: 16px;
-    color: var(--ink-faded);
+    color: var(--text-faded);
     flex-shrink: 0;
 }
 
@@ -299,52 +483,53 @@ body {
     border: none;
     font-family: var(--font-clean);
     font-size: 0.95rem;
-    color: var(--ink-black);
+    color: var(--text-light);
     min-width: 0;
 }
 
 .search-bar input::placeholder {
-    color: var(--ink-faded);
+    color: var(--text-dim);
 }
 
 .search-bar input:focus {
     outline: none;
 }
 
-ul#folder-list,
-ul#notes-list {
-    list-style: none;
+/* ---------- Note content area ---------- */
+
+.placeholder-text {
+    color: var(--text-faded);
+    font-style: italic;
+    font-size: 1.1rem;
 }
 
-.folder-item,
-.note-item {
-    padding: 0.55rem 0.7rem;
-    cursor: pointer;
-    border-radius: 4px;
-    font-size: 1rem;
-}
-
-.note-item {
-    border-bottom: 1px solid var(--paper-yellow-darker);
-}
-
-.note-item-title {
+.note-title-input {
     font-family: var(--current-font);
-    font-size: 1rem;
-    color: var(--ink-black);
-    margin-bottom: 0.15rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-size: 1.95rem;
+    font-weight: 600;
+    color: var(--text-light);
+    background: transparent;
+    border: none;
+    outline: none;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    padding: 0;
 }
 
-.note-item-preview {
+.note-title-input::placeholder {
+    color: var(--text-faded);
+    font-style: italic;
+}
+
+.note-title-input:focus {
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
+}
+
+#note-display .note-meta {
     font-family: var(--font-clean);
     font-size: 0.85rem;
-    color: var(--ink-faded);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    color: var(--text-faded);
+    margin-bottom: 1rem;
 }
 
 .note-meta .tags {
@@ -355,94 +540,12 @@ ul#notes-list {
 
 .note-meta .tag {
     font-family: var(--font-clean);
-    font-size: 0.75rem;
-    background: var(--paper-yellow-darker);
-    padding: 0.15rem 0.55rem;
+    font-size: 0.74rem;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0.15rem 0.6rem;
     border-radius: 10px;
-    color: #4a3a10;
-}
-
-.folder-item:hover,
-.note-item:hover {
-    background: var(--paper-yellow-dark);
-}
-
-.folder-item.active,
-.note-item.active {
-    background: var(--paper-yellow-darker);
-    font-weight: bold;
-}
-
-.note-item.placeholder {
-    color: var(--ink-faded);
-    font-style: italic;
-    cursor: default;
-}
-
-.note-item.placeholder:hover {
-    background: transparent;
-}
-
-/* ---------- Note content area ---------- */
-
-.placeholder-text {
-    color: var(--ink-faded);
-    font-style: italic;
-    font-size: 1.2rem;
-}
-
-#note-display h1,
-#note-display h2,
-#note-display h3 {
-    font-family: var(--current-font);
-    margin-bottom: 0.5rem;
-}
-
-#note-display .note-meta {
-    font-family: var(--font-clean);
-    font-size: 0.85rem;
-    color: var(--ink-faded);
-    margin-bottom: 1rem;
-}
-
-#note-display .note-body {
-    white-space: pre-wrap;
-    font-family: var(--current-font);
-    font-size: 17px;
-    line-height: 32px;
-    background-image: linear-gradient(
-        to bottom,
-        transparent 25px,
-        var(--line-blue) 25px,
-        var(--line-blue) 26px
-    );
-    background-size: 100% 32px;
-    background-position: 0 0;
-    padding-top: 0;
-}
-
-/* Editable title + body */
-
-.note-title-input {
-    font-family: var(--current-font);
-    font-size: 2.1rem;
-    font-weight: bold;
-    color: var(--ink-black);
-    background: transparent;
-    border: none;
-    outline: none;
-    width: 100%;
-    margin-bottom: 0.5rem;
-    padding: 0;
-}
-
-.note-title-input::placeholder {
-    color: var(--ink-faded);
-    font-style: italic;
-}
-
-.note-title-input:focus {
-    border-bottom: 1px dashed var(--paper-yellow-darker);
+    color: var(--text-on-glass);
 }
 
 .note-body-input {
@@ -450,46 +553,54 @@ ul#notes-list {
     width: 100%;
     min-height: 60vh;
     font-family: var(--current-font);
-    font-size: 17px;
-    line-height: 32px;
-    color: var(--ink-black);
-    background: transparent;
-    border: none;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-light);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 4px;
     outline: none;
     resize: none;
-    padding: 0;
-    background-image: linear-gradient(
-        to bottom,
-        transparent 25px,
-        var(--line-blue) 25px,
-        var(--line-blue) 26px
-    );
-    background-size: 100% 32px;
-    background-position: 0 0;
+    padding: 0.9rem 1rem;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 .note-body-input::placeholder {
-    color: var(--ink-faded);
+    color: var(--text-faded);
     font-style: italic;
+}
+
+.note-body-input:focus {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
 .note-actions {
     margin-top: 1.5rem;
     padding-top: 1rem;
-    border-top: 1px dashed var(--paper-yellow-darker);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .delete-btn {
     font-family: var(--font-clean);
-    font-size: 0.9rem;
-    padding: 0.45rem 1rem;
-    background: rgba(200, 80, 80, 0.12);
-    border: 1px solid #b85050;
-    color: #8a3030;
+    font-size: 0.88rem;
+    padding: 0.45rem 1.1rem;
+    color: var(--text-light);
+    background: linear-gradient(180deg,
+        rgba(180, 80, 80, 0.55) 0%,
+        rgba(140, 40, 40, 0.55) 100%);
+    border: 1px solid rgba(255, 200, 200, 0.4);
     border-radius: 4px;
     cursor: pointer;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        0 1px 2px rgba(0, 0, 0, 0.25);
 }
 
 .delete-btn:hover {
-    background: rgba(200, 80, 80, 0.22);
+    background: linear-gradient(180deg,
+        rgba(200, 90, 90, 0.7) 0%,
+        rgba(160, 50, 50, 0.7) 100%);
 }

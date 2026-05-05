@@ -813,7 +813,7 @@ ul#notes-list {
     justify-content: space-between;
     padding-bottom: 0.8rem;
     margin-bottom: 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    border-bottom: 1px solid rgba(var(--accent-rgb), 0.4);
 }
 
 .kanban-pane-header h2 {
@@ -821,7 +821,12 @@ ul#notes-list {
     font-size: 1.3rem;
     font-weight: 600;
     color: var(--text-light);
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+    text-shadow:
+        0 1px 0 rgba(0, 0, 0, 0.25),
+        0 0 12px rgba(var(--accent-rgb), 0.5);
+    border-left: 5px solid rgb(var(--accent-rgb));
+    padding-left: 0.8rem;
+    box-shadow: -1px 0 8px rgba(var(--accent-rgb), 0.4);
 }
 
 /* When in Jots folder, hide kanban (Jots is an inbox, not a project) */

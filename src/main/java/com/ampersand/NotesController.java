@@ -34,7 +34,7 @@ public class NotesController {
     @PostMapping
     public Note create(@RequestBody NoteRequest req) throws IOException {
         LocalDateTime now = LocalDateTime.now();
-        String folder = req.folder() != null ? req.folder() : "Work";
+        String folder = req.folder() != null ? req.folder() : "ZipCode";
         Note note = new Note(req.title(), req.content(), req.author(), now, now, req.tags(), folder);
         Notes2.writeNote(NOTES_DIR, req.id(), note);
         return note;

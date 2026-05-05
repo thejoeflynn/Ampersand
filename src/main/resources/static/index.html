@@ -24,6 +24,24 @@
                 <div class="clock-time">--:--</div>
                 <div class="clock-date">--</div>
             </div>
+            <div class="personalize-wrapper">
+                <button id="personalize-btn" type="button" title="Personalize">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M18.37 2.63 14 7l-1.59-1.59a2 2 0 0 0-2.82 0L8 7l9 9 1.59-1.59a2 2 0 0 0 0-2.82L17 10l4.37-4.37a2.12 2.12 0 1 0-3-3Z"/>
+                        <path d="M9 8c-2 3-4 3.5-7 4l8 10c2-1 6-5 6-7"/>
+                        <path d="M14.5 17.5 4.5 15"/>
+                    </svg>
+                </button>
+                <div id="personalize-panel" class="personalize-panel hidden">
+                    <h3>Theme</h3>
+                    <div class="theme-presets" id="theme-presets"></div>
+                    <h3>Custom wallpaper</h3>
+                    <div class="custom-wallpaper">
+                        <input type="text" id="custom-wallpaper-url" placeholder="Paste an image URL…" />
+                        <button id="apply-custom-btn" type="button">Apply</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -37,16 +55,27 @@
                     <span>Jots</span>
                 </button>
             </div>
-            <h2>Folders</h2>
+            <h2>Projects</h2>
             <ul id="folder-list">
-                <li class="folder-item active" data-folder="Work">Work</li>
-                <li class="folder-item" data-folder="Personal">Personal</li>
+                <li class="folder-item active" data-folder="ZipCode" data-color="109, 180, 224">
+                    <span class="folder-color-dot" style="background: rgb(109, 180, 224)"></span>ZipCode
+                </li>
+                <li class="folder-item" data-folder="Cape Athletic" data-color="142, 211, 163">
+                    <span class="folder-color-dot" style="background: rgb(142, 211, 163)"></span>Cape Athletic
+                </li>
+                <li class="folder-item" data-folder="BAB Productions" data-color="176, 140, 216">
+                    <span class="folder-color-dot" style="background: rgb(176, 140, 216)"></span>BAB Productions
+                </li>
+                <li class="folder-item" data-folder="Personal" data-color="240, 168, 100">
+                    <span class="folder-color-dot" style="background: rgb(240, 168, 100)"></span>Personal
+                </li>
             </ul>
         </aside>
 
+        <div class="notes-section">
         <section class="note-list-pane">
             <div class="note-list-header">
-                <h2 id="current-folder-label">Work</h2>
+                <h2 id="current-folder-label" class="folder-label">ZipCode</h2>
                 <button id="new-note-btn" class="new-note-btn" type="button" title="New note">+</button>
             </div>
             <div class="search-bar">
@@ -66,7 +95,48 @@
                 <p class="placeholder-text">Pick a note to read.</p>
             </div>
         </section>
+        </div>
+
+        <section id="kanban-pane" class="kanban-pane">
+            <div class="kanban-pane-header">
+                <h2 class="folder-label">ZipCode</h2>
+            </div>
+            <div class="kanban-board">
+                <div class="kanban-column" data-column="To Do">
+                    <h3 class="kanban-column-title">To Do</h3>
+                    <div class="kanban-cards" data-column="To Do"></div>
+                    <button class="kanban-add-card" data-column="To Do" type="button">+ Add a card</button>
+                </div>
+                <div class="kanban-column" data-column="In Progress">
+                    <h3 class="kanban-column-title">In Progress</h3>
+                    <div class="kanban-cards" data-column="In Progress"></div>
+                    <button class="kanban-add-card" data-column="In Progress" type="button">+ Add a card</button>
+                </div>
+                <div class="kanban-column" data-column="Done">
+                    <h3 class="kanban-column-title">Done</h3>
+                    <div class="kanban-cards" data-column="Done"></div>
+                    <button class="kanban-add-card" data-column="Done" type="button">+ Add a card</button>
+                </div>
+            </div>
+        </section>
     </main>
+
+    <!-- Card editor modal (Trello-style) -->
+    <div id="card-modal" class="card-modal hidden">
+        <div class="card-modal-backdrop"></div>
+        <div class="card-modal-panel">
+            <button id="card-modal-close" class="card-modal-close" type="button" title="Close">×</button>
+            <input type="text" id="card-modal-title" class="card-modal-title" placeholder="Card title" />
+            <div class="card-modal-meta" id="card-modal-meta"></div>
+            <label class="card-modal-label">Description</label>
+            <textarea id="card-modal-description" class="card-modal-description" placeholder="Add a description…"></textarea>
+            <label class="card-modal-label">Due date</label>
+            <input type="datetime-local" id="card-modal-duedate" class="card-modal-duedate" />
+            <div class="card-modal-actions">
+                <button id="card-modal-delete" class="card-modal-delete" type="button">Delete card</button>
+            </div>
+        </div>
+    </div>
 
     <script src="/app.js"></script>
 </body>

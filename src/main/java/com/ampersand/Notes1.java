@@ -243,14 +243,14 @@ public class Notes1 {
         Path searchDir = Files.exists(notesSubdir) ? notesSubdir : notesDir;
 
         try {
-            List<Note> results = Notes2.search(searchDir, query);
+            List<NoteSummary> results = Notes2.search(searchDir, query);
             if (results.isEmpty()) {
                 System.out.println("No notes match '" + query + "'.");
                 return true;
             }
             System.out.println("Found " + results.size() + " note(s) matching '" + query + "':");
-            for (Note note : results) {
-                System.out.println("  - " + note.getTitle());
+            for (NoteSummary note : results) {
+                System.out.println("  - " + note.title());
             }
             return true;
         } catch (IOException e) {
